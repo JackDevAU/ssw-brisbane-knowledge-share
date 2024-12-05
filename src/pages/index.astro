@@ -1,0 +1,9 @@
+---
+import { getCollection } from 'astro:content';
+export const prerender = true;
+
+const knowledgeSessions = await getCollection('knowledge');
+if (Astro.request.url.endsWith('/')) {
+  return Astro.redirect('/1');
+}
+---

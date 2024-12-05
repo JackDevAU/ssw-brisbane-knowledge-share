@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import VideoPlayer from '../../components/VideoPlayer.astro';
+import { SearchDialog } from '../../components/SearchDialog';
+import { formatDate } from '../../utils/formatDate';
+
+export async function getStaticPaths() {
+    const sessions = await getCollection('knowledge');
+    return sessions.map(session => ({
+        params: { slug: session.slug },
+        props: { session, allSessions: sessions }
+    }));
+}
+
+const { session, allSessions } = Astro.props;
+const { title, date, presenter, summary, tags, videoUrl, slides, githubRepo, presentationLength } = session.data;
+
+const formattedSessions = allSessions.map((s) => ({
+    ...s.data,
+    date: formatDate(s.data.date),
+    slug: s.slug,
+}));
+---
+
+<Layout title={`${title} - SSW Brisbane Knowledge Share`}>
+    <SearchDialog client:load sessions={formattedSessions} />
+
+    <div class="max-w-4xl mx-auto mb-6">
+        <a href="/" class="inline-flex items-center text-gray-600 hover:text-primary transition-colors">
+            ← Back to all sessions
+        </a>
+    </div>
+
+    <article class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="p-8">
+            <header class="mb-8">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6">{title}</h1>
+                <div class="flex flex-wrap gap-3">
+                    <div class="inline-flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full text-gray-700">
+                        <span class="text-lg">📅</span>
+                        {formatDate(date)}
+                    </div>
+                    <div class="inline-flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full text-gray-700">
+                        <span class="text-lg">👤</span>
+                        {presenter}
+                    </div>
+                    {presentationLength && (
+                        <div class="inline-flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full text-gray-700">
+                            <span class="text-lg">⏱️</span>
+                            {presentationLength}
+                        </div>
+                    )}
+                </div>
+            </header>
+
+            {videoUrl && <VideoPlayer videoUrl={videoUrl} />}
+
+            <div class="prose prose-lg max-w-none mb-8">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Summary</h2>
+                <p class="text-gray-600 leading-relaxed">{summary}</p>
+            </div>
+
+            {(slides || githubRepo) && (
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-4">Resources</h2>
+                    <div class="flex flex-wrap gap-4">
+                        {slides && (
+                            <a 
+                                href={slides}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center gap-2 px-6 py-3 bg-gray-50 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+                            >
+                                <span class="text-xl">📊</span>
+                                View Slides
+                            </a>
+                        )}
+                        {githubRepo && (
+                            <a 
+                                href={githubRepo}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center gap-2 px-6 py-3 bg-gray-50 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+                            >
+                                <span class="text-xl">💻</span>
+                                View Code
+                            </a>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Tags</h2>
+                <div class="flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                        <a 
+                            href={`/tag/${tag}`}
+                            class="bg-gray-50 px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
+                        >
+                            #{tag}
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </article>
+</Layout>

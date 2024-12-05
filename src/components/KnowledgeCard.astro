@@ -1,0 +1,90 @@
+---
+interface Props {
+    title: string;
+    date: string;
+    presenter: string;
+    summary: string;
+    tags: string[];
+    slug?: string;
+}
+
+const { title, date, presenter, summary, tags, slug } = Astro.props;
+
+// Truncate summary to 100 characters
+const truncatedSummary = summary.length > 100 
+    ? `${summary.substring(0, 100)}...` 
+    : summary;
+---
+
+<div class="knowledge-card">
+    <div class="card-header">
+        <div class="title-group">
+            <h3>
+                {slug ? (
+                    <a href={`/session/${slug}`} class="hover:text-primary transition-colors">
+                        {title}
+                    </a>
+                ) : (
+                    title
+                )}
+            </h3>
+            <span class="date">{date}</span>
+        </div>
+    </div>
+    <div class="presenter">🎯 Presented by: {presenter}</div>
+    <p class="summary">{truncatedSummary}</p>
+    <div class="tags">
+        {tags.map((tag) => (
+            <a href={`/tag/${tag}`} class="tag">#{tag}</a>
+        ))}
+    </div>
+    {slug && (
+        <div class="mt-4 text-right">
+            <a href={`/session/${slug}`} class="view-more">
+                View Session Details →
+            </a>
+        </div>
+    )}
+</div>
+
+<style>
+    .knowledge-card {
+        @apply bg-white rounded-lg p-6 shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl border border-gray-100;
+    }
+
+    .card-header {
+        @apply mb-4;
+    }
+
+    .title-group {
+        @apply flex flex-col gap-1;
+    }
+
+    h3 {
+        @apply m-0 text-gray-900 text-xl font-bold leading-tight;
+    }
+
+    .date {
+        @apply text-gray-500 text-sm;
+    }
+
+    .presenter {
+        @apply text-primary font-medium mb-4;
+    }
+
+    .summary {
+        @apply text-gray-600 leading-relaxed mb-4 line-clamp-3;
+    }
+
+    .tags {
+        @apply flex gap-2 flex-wrap;
+    }
+
+    .tag {
+        @apply bg-gray-50 px-3 py-1 rounded-full text-sm text-gray-600 hover:bg-gray-100 transition-colors;
+    }
+
+    .view-more {
+        @apply inline-flex items-center text-primary font-medium hover:text-primary/80 transition-colors;
+    }
+</style>
