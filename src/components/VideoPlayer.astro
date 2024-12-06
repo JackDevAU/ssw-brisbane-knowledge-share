@@ -6,24 +6,60 @@ interface Props {
 const { videoUrl } = Astro.props;
 ---
 
-<div class="max-w-3xl mx-auto mb-8">
-    <div class="relative w-full bg-gray-100 rounded-lg shadow-lg overflow-hidden pb-[56.25%] flex items-center justify-center">
-        <a
-            href={videoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex flex-col items-center justify-center bg-black text-white rounded-full w-16 h-16 hover:bg-gray-800 transition duration-300"
-            title="Watch Video"
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-                class="w-6 h-6"
-            >
-                <path d="M4.5 3.5v9l7-4.5-7-4.5z" />
-            </svg>
-        </a>
-        <p class="mt-2 text-sm text-gray-600">Watch on SharePoint</p>
+<div class="video-wrapper">
+    <div class="video-container">
+        <div class="video-placeholder">
+            <div class="play-button-container">
+                <button 
+                    onclick={`window.open('${videoUrl}', '_blank')`}
+                    class="play-button"
+                    aria-label="Watch video on SharePoint"
+                >
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        viewBox="0 0 24 24" 
+                        fill="currentColor" 
+                        class="play-icon"
+                    >
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="video-info">
+                <p class="text-lg font-semibold">Watch on SharePoint</p>
+                <p class="text-sm text-gray-500 mt-2">Click to open in a new tab</p>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    .video-wrapper {
+        @apply max-w-[800px] mx-auto mb-8;
+    }
+
+    .video-container {
+        @apply relative w-full pt-[56.25%] bg-gray-900 rounded-lg overflow-hidden shadow-lg;
+    }
+
+    .video-placeholder {
+        @apply absolute inset-0 flex flex-col items-center justify-center text-white;
+    }
+
+    .play-button-container {
+        @apply mb-4;
+    }
+
+    .play-button {
+        @apply w-20 h-20 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors cursor-pointer border-2 border-white/40;
+    }
+
+    .play-icon {
+        @apply w-10 h-10 text-white;
+    }
+
+    .video-info {
+        @apply text-center;
+    }
+</style>
+</boltArtifact>
