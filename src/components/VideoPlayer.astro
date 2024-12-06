@@ -40,17 +40,14 @@ const embedUrl = getEmbedUrl(videoUrl);
             <iframe
                 src={embedUrl}
                 class="absolute top-0 left-0 w-full h-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
                 title="Knowledge Sharing Video"
             ></iframe>
         ) : (
-            <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-600">
-                <a
-                    href={videoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="flex flex-col items-center justify-center bg-black text-white rounded-full w-16 h-16 hover:bg-gray-800 transition duration-300"
+            <div id="video-placeholder" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-600">
+                <div
+                    id="video-button"
+                    class="flex flex-col items-center justify-center bg-black text-white rounded-full w-16 h-16 hover:bg-gray-800 transition duration-300 cursor-pointer"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -60,9 +57,22 @@ const embedUrl = getEmbedUrl(videoUrl);
                     >
                         <path d="M4.5 3.5v9l7-4.5-7-4.5z" />
                     </svg>
-                </a>
+                </div>
                 <p class="mt-2 text-sm">Watch on SharePoint</p>
             </div>
         )}
     </div>
 </div>
+
+<script>
+    // Attach event listener dynamically for CSP compliance
+    document.addEventListener('DOMContentLoaded', () => {
+        const videoButton = document.getElementById('video-button');
+        if (videoButton) {
+            videoButton.addEventListener('click', () => {
+                const videoUrl = "{{videoUrl}}"; // Replace with dynamic data
+                window.open(videoUrl, '_blank', 'noopener noreferrer');
+            });
+        }
+    });
+</script>
