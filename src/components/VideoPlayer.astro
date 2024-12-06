@@ -1,6 +1,4 @@
 ---
-import { useEffect } from 'react';
-
 interface Props {
     videoUrl: string;
 }
@@ -42,9 +40,9 @@ const embedUrl = getEmbedUrl(videoUrl);
             <iframe
                 src={embedUrl}
                 class="absolute top-0 left-0 w-full h-full border-0"
-                allowfullscreen
-                title="Knowledge Sharing Video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+                title="Knowledge Sharing Video"
             ></iframe>
         ) : (
             <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-600">
