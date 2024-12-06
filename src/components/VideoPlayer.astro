@@ -1,4 +1,6 @@
 ---
+import { useEffect } from 'react';
+
 interface Props {
     videoUrl: string;
 }
@@ -46,8 +48,10 @@ const embedUrl = getEmbedUrl(videoUrl);
             ></iframe>
         ) : (
             <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 text-gray-600">
-                <button
-                    onclick={() => window.open(videoUrl, '_blank', 'noopener noreferrer')}
+                <a
+                    href={videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     class="flex flex-col items-center justify-center bg-black text-white rounded-full w-16 h-16 hover:bg-gray-800 transition duration-300"
                 >
                     <svg
@@ -58,7 +62,7 @@ const embedUrl = getEmbedUrl(videoUrl);
                     >
                         <path d="M4.5 3.5v9l7-4.5-7-4.5z" />
                     </svg>
-                </button>
+                </a>
                 <p class="mt-2 text-sm">Watch on SharePoint</p>
             </div>
         )}
