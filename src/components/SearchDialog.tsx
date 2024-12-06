@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Command } from 'cmdk';
 import type { SearchResult } from '../types/search';
 
-export function SearchDialog({ sessions }: { sessions: SearchResult[] }) {
+export function SearchDialog({ sessions = [] }: { sessions: SearchResult[] }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const ref = useRef<HTMLDivElement>(null);
@@ -10,7 +10,7 @@ export function SearchDialog({ sessions }: { sessions: SearchResult[] }) {
   const listRef = useRef<HTMLDivElement>(null);
 
   // Get unique tags from all sessions
-  const allTags = Array.from(new Set(sessions.flatMap(session => session.tags)));
+  const allTags = Array.from(new Set(sessions?.flatMap(session => session.tags) || []));
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -85,6 +85,13 @@ export function SearchDialog({ sessions }: { sessions: SearchResult[] }) {
       } else {
         handleSelect(selectedItem.title, selectedItem.slug);
       }
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const newIndex = e.key === 'ArrowDown' 
+        ? (selectedIndex + 1) % items.length
+        : (selectedIndex - 1 + items.length) % items.length;
+      setSelectedIndex(newIndex);
+      scrollSelectedIntoView(newIndex);
     }
   };
 
