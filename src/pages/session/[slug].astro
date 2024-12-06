@@ -24,8 +24,6 @@ const formattedSessions = allSessions.map((s) => ({
 ---
 
 <Layout title={`${title} - SSW Brisbane Knowledge Share`}>
-    <SearchDialog client:load sessions={formattedSessions} />
-
     <div class="max-w-4xl mx-auto mb-6">
         <a href="/" class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors">
             ← Back to all sessions
