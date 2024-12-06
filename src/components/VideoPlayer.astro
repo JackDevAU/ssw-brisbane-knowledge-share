@@ -5,48 +5,64 @@ interface Props {
 
 const { videoUrl } = Astro.props;
 
-// Function to convert SharePoint URL to embed URL
-function getEmbedUrl(url: string): string {
-    if (!url.includes('sharepoint.com')) return url;
-    
-    // Extract the unique ID from the URL
-    const uniqueIdMatch = url.match(/UniqueId=([^&]+)/);
-    if (!uniqueIdMatch) return url;
-    
-    const baseUrl = url.split('personal')[0] + 'personal';
-    const uniqueId = uniqueIdMatch[1];
-    
-    return `${baseUrl}/samwagner_ssw_com_au/_layouts/15/embed.aspx?UniqueId=${uniqueId}&embed={"ust":true,"hv":"CopyEmbedCode"}&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create`;
+// Function to extract UniqueId from SharePoint URL
+function extractUniqueId(url: string): string | null {
+    const uniqueIdRegex = /UniqueId=([^&]+)/;
+    const match = url.match(uniqueIdRegex);
+    return match ? match[1] : null;
 }
 
-const embedUrl = getEmbedUrl(videoUrl);
+// Function to create embed URL
+function createEmbedUrl(uniqueId: string): string {
+    return `https://sswcom-my.sharepoint.com/personal/samwagner_ssw_com_au/_layouts/15/embed.aspx?UniqueId=${uniqueId}&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create`;
+}
+
+const uniqueId = extractUniqueId(videoUrl);
+const embedUrl = uniqueId ? createEmbedUrl(uniqueId) : '';
 ---
 
-<div class="video-container">
-    {videoUrl ? (
-        <iframe
-            src={embedUrl}
-            width="640"
-            height="360"
-            frameborder="0"
-            scrolling="no"
-            allowfullscreen
-            title="SharePoint video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        ></iframe>
-    ) : (
-        <div class="flex items-center justify-center h-full bg-gray-100">
-            <p class="text-gray-600">Video not available</p>
-        </div>
-    )}
+<div class="video-wrapper">
+    <div class="video-container">
+        {embedUrl ? (
+            <iframe
+                src={embedUrl}
+                width="640"
+                height="360"
+                frameborder="0"
+                scrolling="no"
+                allowfullscreen
+                title="SharePoint video player"
+                style="border:none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; height: 100%; max-width: 100%;"
+            ></iframe>
+        ) : (
+            <div class="flex items-center justify-center h-full bg-gray-100">
+                <p class="text-gray-600">Video not available</p>
+            </div>
+        )}
+    </div>
 </div>
 
 <style>
+    .video-wrapper {
+        @apply max-w-[640px] mx-auto;
+    }
+
     .video-container {
         @apply relative w-full pt-[56.25%] bg-gray-100 rounded-lg overflow-hidden shadow-lg mb-8;
     }
 
     iframe {
-        @apply absolute top-0 left-0 w-full h-full border-0;
+        @apply absolute top-0 left-0 w-full h-full;
     }
 </style>
+</boltArtifact>
+
+I've updated the VideoPlayer component to:
+1. Properly extract the UniqueId from the SharePoint URL
+2. Create the correct embed URL format
+3. Add proper styling to match the provided embed code
+4. Center the video player with a max width
+5. Maintain the correct aspect ratio
+6. Add proper iframe styling attributes
+
+The video should now display correctly in your
