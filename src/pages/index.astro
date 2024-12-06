@@ -1,9 +1,62 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import KnowledgeCard from '../components/KnowledgeCard.astro';
+import Pagination from '../components/Pagination.astro';
 import { getCollection } from 'astro:content';
-export const prerender = true;
+import { formatDate } from '../utils/formatDate';
 
 const knowledgeSessions = await getCollection('knowledge');
-if (Astro.request.url.endsWith('/')) {
-  return Astro.redirect('/1');
-}
+const sessionsPerPage = 6;
+const totalPages = Math.ceil(knowledgeSessions.length / sessionsPerPage);
+
+const sessions = knowledgeSessions
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, sessionsPerPage);
+
+const formattedSessions = knowledgeSessions.map((session) => ({
+  ...session.data,
+  date: formatDate(session.data.date),
+  slug: session.slug,
+}));
 ---
+
+<Layout title="SSW Brisbane Knowledge Share" sessions={formattedSessions}>
+  <div class="intro">
+    <p>Welcome to SSW Brisbane's Knowledge Share hub! Here we collect and share insights from our lunchtime learning sessions. 🍽️ + 🧠 = 💡</p>
+  </div>
+
+  <section class="knowledge-grid">
+    {sessions.map((session) => (
+      <KnowledgeCard
+        title={session.data.title}
+        date={formatDate(session.data.date)}
+        presenter={session.data.presenter}
+        summary={session.data.summary}
+        tags={session.data.tags}
+        slug={session.slug}
+      />
+    ))}
+  </section>
+
+  <Pagination
+    currentPage={1}
+    totalPages={totalPages}
+    baseUrl="/"
+  />
+</Layout>
+
+<style>
+  .intro {
+    @apply bg-white p-6 rounded-lg mb-8 text-center text-lg text-gray-600 shadow-md;
+  }
+
+  .knowledge-grid {
+    @apply grid gap-8;
+  }
+
+  @screen md {
+    .knowledge-grid {
+      @apply grid-cols-[repeat(auto-fit,minmax(300px,1fr))];
+    }
+  }
+</style>

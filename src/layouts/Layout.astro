@@ -1,85 +1,65 @@
 ---
+import Header from '../components/Header.astro';
+import type { SearchResult } from '../types/search';
+
 interface Props {
-    title: string;
+  title: string;
+  sessions: SearchResult[];
 }
 
-const { title } = Astro.props;
+const { title, sessions } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="description" content="SSW Brisbane Knowledge Sharing" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="generator" content={Astro.generator} />
-        <title>{title}</title>
-    </head>
-    <body>
-        <header>
-            <div class="header-content">
-                <h1>🎱 SSW Brisbane Knowledge Share</h1>
-                <p>Lunchtime learning and sharing</p>
-            </div>
-        </header>
-        <main>
-            <slot />
-        </main>
-        <footer>
-            <p>Made with ❤️ by SSW Brisbane</p>
-        </footer>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="SSW Brisbane Knowledge Sharing" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Header sessions={sessions} />
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <p>Made with ❤️ by SSW Brisbane</p>
+    </footer>
+  </body>
 </html>
 
 <style is:global>
-    :root {
-        --primary-color: #cc4141;
-        --background-color: #f5f5f5;
-        --text-color: #333;
-    }
+  :root {
+    --primary-color: #cc4141;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+  }
 
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-    html {
-        font-family: system-ui, sans-serif;
-        background: var(--background-color);
-        color: var(--text-color);
-    }
+  html {
+    font-family: system-ui, sans-serif;
+    background: var(--background-color);
+    color: var(--text-color);
+  }
 
-    header {
-        background: var(--primary-color);
-        color: white;
-        padding: 2rem 0;
-        margin-bottom: 2rem;
-    }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+  }
 
-    .header-content {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 0 1rem;
-        text-align: center;
-    }
-
-    header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    main {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 0 1rem 2rem;
-    }
-
-    footer {
-        text-align: center;
-        padding: 2rem;
-        color: #666;
-        border-top: 1px solid #ddd;
-    }
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    border-top: 1px solid #ddd;
+  }
 </style>
