@@ -7,7 +7,11 @@ interface Props {
 
 const { currentPage, totalPages, baseUrl } = Astro.props;
 
-const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+let pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+if(pages.length < 2){
+  pages = []
+}
 ---
 
 <nav class="flex justify-center gap-2 mt-8">
@@ -20,7 +24,7 @@ const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
     </a>
   )}
   
-  {pages.map((page) => (
+  {pages?.map((page) => (
     <a
       href={`${baseUrl}${page}`}
       class={`px-4 py-2 rounded-lg ${
