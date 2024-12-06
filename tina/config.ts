@@ -57,6 +57,12 @@ export default defineConfig({
             list: true,
             required: true,
           },
+          {
+            type: "string",
+            name: "videoUrl",
+            label: "Video URL",
+            required: true
+          }
         ],
       },
     ],

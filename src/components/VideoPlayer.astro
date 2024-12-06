@@ -5,24 +5,39 @@ interface Props {
 
 const { videoUrl } = Astro.props;
 
-// Function to get video ID from YouTube URL
-function getYouTubeId(url: string) {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : null;
+// Function to convert SharePoint URL to embed URL
+function getEmbedUrl(url: string): string {
+    if (!url.includes('sharepoint.com')) return url;
+    
+    // Extract the unique ID from the URL
+    const uniqueIdMatch = url.match(/UniqueId=([^&]+)/);
+    if (!uniqueIdMatch) return url;
+    
+    const baseUrl = url.split('personal')[0] + 'personal';
+    const uniqueId = uniqueIdMatch[1];
+    
+    return `${baseUrl}/samwagner_ssw_com_au/_layouts/15/embed.aspx?UniqueId=${uniqueId}&embed={"ust":true,"hv":"CopyEmbedCode"}&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create`;
 }
 
-const videoId = getYouTubeId(videoUrl);
+const embedUrl = getEmbedUrl(videoUrl);
 ---
 
 <div class="video-container">
-    {videoId && (
+    {videoUrl ? (
         <iframe
-            src={`https://www.youtube.com/embed/${videoId}`}
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            src={embedUrl}
+            width="640"
+            height="360"
+            frameborder="0"
+            scrolling="no"
             allowfullscreen
+            title="SharePoint video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         ></iframe>
+    ) : (
+        <div class="flex items-center justify-center h-full bg-gray-100">
+            <p class="text-gray-600">Video not available</p>
+        </div>
     )}
 </div>
 
