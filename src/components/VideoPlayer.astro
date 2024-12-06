@@ -5,38 +5,61 @@ interface Props {
 
 const { videoUrl } = Astro.props;
 
-// Function to extract UniqueId from SharePoint URL
-function extractUniqueId(url: string): string | null {
-    const uniqueIdRegex = /UniqueId=([^&]+)/;
-    const match = url.match(uniqueIdRegex);
-    return match ? match[1] : null;
+function getEmbedUrl(url: string): string {
+    try {
+        const urlObj = new URL(url);
+        const path = urlObj.pathname;
+        const uniqueId = path.split('/').pop()?.split('.')[0];
+        
+        if (!uniqueId) return '';
+
+        const baseUrl = 'https://sswcom-my.sharepoint.com/personal/samwagner_ssw_com_au/_layouts/15/embed.aspx';
+        const embedParams = {
+            UniqueId: uniqueId,
+            embed: JSON.stringify({
+                ust: true,
+                hv: 'CopyEmbedCode'
+            }),
+            referrer: 'StreamWebApp',
+            referrerScenario: 'EmbedDialog.Create'
+        };
+
+        const searchParams = new URLSearchParams(embedParams);
+        return `${baseUrl}?${searchParams.toString()}`;
+    } catch {
+        return '';
+    }
 }
 
-// Function to create embed URL
-function createEmbedUrl(uniqueId: string): string {
-    return `https://sswcom-my.sharepoint.com/personal/samwagner_ssw_com_au/_layouts/15/embed.aspx?UniqueId=${uniqueId}&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create`;
-}
-
-const uniqueId = extractUniqueId(videoUrl);
-const embedUrl = uniqueId ? createEmbedUrl(uniqueId) : '';
+const embedUrl = getEmbedUrl(videoUrl);
 ---
 
 <div class="video-wrapper">
     <div class="video-container">
-        {embedUrl ? (
+        {embedUrl && (
             <iframe
                 src={embedUrl}
-                width="640"
-                height="360"
+                width="100%"
+                height="100%"
                 frameborder="0"
                 scrolling="no"
                 allowfullscreen
-                title="SharePoint video player"
-                style="border:none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; height: 100%; max-width: 100%;"
+                title="Knowledge Sharing Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             ></iframe>
-        ) : (
-            <div class="flex items-center justify-center h-full bg-gray-100">
-                <p class="text-gray-600">Video not available</p>
+        )}
+        {!embedUrl && (
+            <div class="video-placeholder">
+                <p class="text-lg font-semibold">Video not available</p>
+                <p class="text-sm text-gray-500 mt-2">Please ensure you're logged into SharePoint to view this content</p>
+                <a 
+                    href={videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mt-4 inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                    Open in SharePoint
+                </a>
             </div>
         )}
     </div>
@@ -44,25 +67,35 @@ const embedUrl = uniqueId ? createEmbedUrl(uniqueId) : '';
 
 <style>
     .video-wrapper {
-        @apply max-w-[640px] mx-auto;
+        @apply max-w-[800px] mx-auto mb-8;
     }
 
     .video-container {
-        @apply relative w-full pt-[56.25%] bg-gray-100 rounded-lg overflow-hidden shadow-lg mb-8;
+        @apply relative w-full pt-[56.25%] bg-gray-100 rounded-lg overflow-hidden shadow-lg;
+    }
+
+    .video-placeholder {
+        @apply absolute inset-0 flex flex-col items-center justify-center text-gray-600 bg-gray-50;
     }
 
     iframe {
-        @apply absolute top-0 left-0 w-full h-full;
+        @apply absolute inset-0 w-full h-full border-0;
     }
 </style>
 </boltArtifact>
 
-I've updated the VideoPlayer component to:
-1. Properly extract the UniqueId from the SharePoint URL
-2. Create the correct embed URL format
-3. Add proper styling to match the provided embed code
-4. Center the video player with a max width
-5. Maintain the correct aspect ratio
-6. Add proper iframe styling attributes
+I've made several improvements:
 
-The video should now display correctly in your
+1. Updated the Astro configuration:
+   - Set proper Content Security Policy headers
+   - Added frame-ancestors and frame-src directives for SharePoint domains
+   - Configured static output mode
+
+2. Enhanced the VideoPlayer component:
+   - Improved URL parsing logic
+   - Better error handling
+   - Added a "Open in SharePoint" fallback button
+   - Improved styling and responsiveness
+   - Better user feedback for unavailable videos
+
+The video player should now work correctly with SharePoint videos, and users will have a better experience when videos can't be embed
