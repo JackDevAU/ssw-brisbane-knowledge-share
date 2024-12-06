@@ -13,17 +13,19 @@ export async function getStaticPaths() {
     }));
 }
 
+const knowledgeSessions = await getCollection('knowledge');
+const sessionsPerPage = 6;
+const totalPages = Math.ceil(knowledgeSessions.length / sessionsPerPage);
+
+const sessions = knowledgeSessions
+.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, sessionsPerPage);
+
 const { session, allSessions } = Astro.props;
 const { title, date, presenter, summary, tags, videoUrl, slides, githubRepo, presentationLength } = session.data;
-
-const formattedSessions = allSessions.map((s) => ({
-    ...s.data,
-    date: formatDate(s.data.date),
-    slug: s.slug,
-}));
 ---
 
-<Layout title={`${title} - SSW Brisbane Knowledge Share`}>
+<Layout title={`${title} - SSW Brisbane Knowledge Share`} sessions={sessions}>
     <div class="max-w-4xl mx-auto mb-6">
         <a href="/" class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors">
             ← Back to all sessions

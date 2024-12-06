@@ -10,17 +10,11 @@ const sessionsPerPage = 6;
 const totalPages = Math.ceil(knowledgeSessions.length / sessionsPerPage);
 
 const sessions = knowledgeSessions
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, sessionsPerPage);
-
-const formattedSessions = knowledgeSessions.map((session) => ({
-  ...session.data,
-  date: formatDate(session.data.date),
-  slug: session.slug,
-}));
 ---
 
-<Layout title="SSW Brisbane Knowledge Share" sessions={formattedSessions}>
+<Layout title="SSW Brisbane Knowledge Share" sessions={sessions}>
   <div class="intro">
     <p>Welcome to SSW Brisbane's Knowledge Share hub! Here we collect and share insights from our lunchtime learning sessions. 🍽️ + 🧠 = 💡</p>
   </div>

@@ -1,5 +1,5 @@
 {
-  "name": "@example/basics",
+  "name": "ssw-brisbane-knowledge-share",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -8,21 +8,17 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "tina": "tinacms dev -c \"astro dev\"",
-    "tina-build": "tinacms build && astro build"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/node": "^8.2.3",
     "@astrojs/tailwind": "^5.1.0",
-    "@tinacms/cli": "^1.5.39",
     "astro": "^4.5.5",
     "date-fns": "^3.3.1",
     "tailwindcss": "^3.4.1",
-    "tinacms": "^1.5.28",
     "@astrojs/react": "^3.0.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "cmdk": "^0.2.1"
+    "cmdk": "^1.0.4"
   }
 }

@@ -1,16 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Command } from 'cmdk';
-import type { SearchResult } from '../types/search';
 
-export function SearchDialog({ sessions = [] }: { sessions: SearchResult[] }) {
+import { SearchResults } from './SearchResults';
+import type { Session } from '../types/session';
+import { SearchButton } from './SearchButton';
+
+interface SearchDialogProps {
+  sessions?: Session[];
+}
+
+export function SearchDialog({ sessions = [] }: SearchDialogProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const ref = useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Get unique tags from all sessions
-  const allTags = Array.from(new Set(sessions?.flatMap(session => session.tags) || []));
+  const allTags = Array.from(new Set(sessions.flatMap(session => session.data.tags)));
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -24,7 +30,6 @@ export function SearchDialog({ sessions = [] }: { sessions: SearchResult[] }) {
     return () => document.removeEventListener('keydown', down);
   }, []);
 
-  // Function to scroll selected item into view
   const scrollSelectedIntoView = (index: number) => {
     if (!listRef.current) return;
 
@@ -53,9 +58,9 @@ export function SearchDialog({ sessions = [] }: { sessions: SearchResult[] }) {
       return sessions.filter(session => {
         const searchLower = search.toLowerCase();
         return (
-          session.title.toLowerCase().includes(searchLower) ||
-          session.presenter.toLowerCase().includes(searchLower) ||
-          session.tags.some(tag => tag.toLowerCase().includes(searchLower))
+          session.data.title.toLowerCase().includes(searchLower) ||
+          session.data.presenter.toLowerCase().includes(searchLower) ||
+          session.data.tags.some(tag => tag.toLowerCase().includes(searchLower))
         );
       });
     }
@@ -83,7 +88,8 @@ export function SearchDialog({ sessions = [] }: { sessions: SearchResult[] }) {
       if (search.startsWith('#')) {
         handleSelect(`#${selectedItem}`);
       } else {
-        handleSelect(selectedItem.title, selectedItem.slug);
+        const session = selectedItem as Session;
+        handleSelect(session.data.title, session.slug);
       }
     } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
@@ -106,16 +112,11 @@ export function SearchDialog({ sessions = [] }: { sessions: SearchResult[] }) {
   };
 
   const filteredItems = getFilteredItems();
+  const isTagSearch = search.startsWith('#');
 
   return (
     <>
-      <button
-        className="w-full flex items-center justify-between rounded-lg bg-white/10 backdrop-blur-sm px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors"
-        onClick={() => setOpen(true)}
-      >
-        <span>Search sessions...</span>
-        <kbd className="rounded bg-white/20 px-2 py-0.5 text-xs">⌘K</kbd>
-      </button>
+      <SearchButton onClick={() => setOpen(true)} />
 
       <Command.Dialog
         open={open}
@@ -143,56 +144,13 @@ export function SearchDialog({ sessions = [] }: { sessions: SearchResult[] }) {
             No results found.
           </Command.Empty>
           
-          {search.startsWith('#') ? (
-            <Command.Group heading="Tags">
-              {filteredItems.map((tag, index) => (
-                <Command.Item
-                  key={tag}
-                  value={`#${tag}`}
-                  onSelect={() => handleSelect(`#${tag}`)}
-                  className={`flex cursor-pointer flex-col gap-1 rounded-lg p-2 ${
-                    index === selectedIndex ? 'bg-gray-100' : ''
-                  } hover:bg-gray-100`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">#{tag}</span>
-                    <span className="text-sm text-gray-500">
-                      {sessions.filter(s => s.tags.includes(tag)).length} sessions
-                    </span>
-                  </div>
-                </Command.Item>
-              ))}
-            </Command.Group>
-          ) : (
-            <Command.Group heading="Sessions">
-              {filteredItems.map((session, index) => (
-                <Command.Item
-                  key={session.title}
-                  value={session.title}
-                  onSelect={() => handleSelect(session.title, session.slug)}
-                  className={`flex cursor-pointer flex-col gap-1 rounded-lg p-2 ${
-                    index === selectedIndex ? 'bg-gray-100' : ''
-                  } hover:bg-gray-100`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{session.title}</span>
-                    <span className="text-sm text-gray-500">{session.date}</span>
-                  </div>
-                  <span className="text-sm text-gray-600">by {session.presenter}</span>
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {session.tags.map(tag => (
-                      <span 
-                        key={tag}
-                        className="text-xs bg-gray-100 px-2 py-0.5 rounded-full text-gray-600"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </Command.Item>
-              ))}
-            </Command.Group>
-          )}
+          <SearchResults
+            items={filteredItems}
+            selectedIndex={selectedIndex}
+            isTagSearch={isTagSearch}
+            sessions={sessions}
+            onSelect={handleSelect}
+          />
         </Command.List>
       </Command.Dialog>
     </>

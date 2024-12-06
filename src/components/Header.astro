@@ -1,12 +1,12 @@
 ---
 import { SearchDialog } from './SearchDialog';
-import type { SearchResult } from '../types/search';
+import type { Session } from '../types/session';
 
 interface Props {
-  sessions: SearchResult[];
+  sessions?: Session[];
 }
 
-const { sessions } = Astro.props;
+const { sessions = [] } = Astro.props;
 ---
 
 <header>
