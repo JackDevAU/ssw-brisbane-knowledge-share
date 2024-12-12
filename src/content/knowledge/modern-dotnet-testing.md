@@ -1,5 +1,5 @@
 ---
-title: "Modern .NET Testing: Frameworks and Emerging Trends"
+title: "Simplifying Modern .NET Testing - TUnit vs. XUnit"
 date: "2024-12-12"
 presenter: "Daniel Mackay"
 summary: "Daniel Mackay introduces TUnit, a new testing framework in the .NET ecosystem, and compares it to XUnit. He highlights how TUnit's convention-based approach simplifies test discovery and makes tests easier to manage compared to XUnit. The talk also explores emerging trends in dynamic runtime-based test registration and execution, offering insights into how these frameworks align with modern .NET testing strategies."
