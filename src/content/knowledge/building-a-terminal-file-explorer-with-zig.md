@@ -1,5 +1,5 @@
 ---
-title: "Building a Terminal File Explorer: Inside the 'Jido' Project"
+title: "Building a Terminal File Explorer with Zig"
 date: "2025-01-15"
 presenter: "Brook Jeynes"
 summary: "Brook Jeynes walks through the hurdles of creating 'Jido,' a Zig-powered File Explorer designed for the terminal. He shares the technical challenges encountered—from handling file previews to implementing fuzzy search—and details the solutions he employed to keep the tool both efficient and user-friendly. Brook concludes with insights on how Zig’s language features facilitated seamless command integration and improved overall performance."
