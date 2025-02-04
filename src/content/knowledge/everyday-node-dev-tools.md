@@ -1,0 +1,9 @@
+---
+title: "Everyday Node Dev Tools: Package Updates, GitHub Enhancements & More"
+date: "2025-01-30"
+presenter: "Jack Pettit"
+summary: "Jack Pettit gives a quick rundown of several development tools he uses daily to streamline his workflow. He highlights 'Taze' for automating package updates in CI/CD, 'NI' for smart package management based on lock files, and 'Refined GitHub'—a browser extension that enhances GitHub's interface with extra features like a bugs tab and quick navigation commands (GM). He also mentions a bonus tool for exploring community color codes."
+tags: ["Dev Tools", "Package Management", "GitHub", "Taze", "NI", "Refined GitHub", "Productivity"]
+slides: "https://sswcom.sharepoint.com/:fl:/g/contentstorage/CSP_d3702a30-8124-4289-865c-d7cac6c464dc/EcRq49si0vtCgceawtklvVIBTLJN--21sr6u4EU8hg89xw?e=twOpSs&nav=cz0lMkZjb250ZW50c3RvcmFnZSUyRkNTUF9kMzcwMmEzMC04MTI0LTQyODktODY1Yy1kN2NhYzZjNDY0ZGMmZD1iJTIxTUNwdzB5U0JpVUtHWE5mS3hzUmszREwzYm9TQVBlNUFsSDF6WWVQY29VODNmWmFPZ3AwSVRxM3pHYlJYZndneSZmPTAxNjRQVVlYT0VOTFI1V0lXUzdOQklEUjQyWUxNU0xQS1MmYz0lMkYmYT1Mb29wQXBwJng9JTdCJTIydyUyMiUzQSUyMlQwUlRVSHh6YzNkamIyMHVjMmhoY21Wd2IybHVkQzVqYjIxOFlpRk5RM0IzTUhsVFFtbFZTMGRZVG1aTGVITlNhek5FVEROaWIxTkJVR1UxUVd4SU1YcFpaVkJqYjFVNE0yWmFZVTluY0RCSlZIRXpla2RpVWxobWQyZDVmREF4TmpSUVZWbFlUVVZFTjFVeVJrdEZOREpXUVV0U1dFRktURTlDV2xOV1JqVSUzRCUyMiUyQyUyMmklMjIlM0ElMjIwMmVkODNmMC1kNDUwLTQxOGItOGViNS1hMmQ2MTc5YTMwNWUlMjIlN0Q%3D"
+videoUrl: "https://sswcom-my.sharepoint.com/:v:/r/personal/samwagner_ssw_com_au/Documents/Recordings/%F0%9F%8E%B1%20Knowledge%20sharing%20-%20Sam,%20Jack%20and%20Matt%20%F0%9F%A7%A0-20250130_123609-Meeting%20Recording.mp4?csf=1&web=1&e=Z2RxRK&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D"
+---
